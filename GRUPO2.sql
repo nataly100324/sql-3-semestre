@@ -1,7 +1,7 @@
+--yuberli miranda
+--lucia puma
 
-
-
-
+-----------------------------
 
 CREATE TABLE generos (
 id_genero NUMBER PRIMARY KEY,
@@ -11,7 +11,7 @@ orden NUMBER,
 estado char(1)
 );
 
-
+----------------------------------------
 --TIPO DOCUMEDROP TABLENTO
 CREATE TABLE tipo_documento (
 id_tipo_documento NUMBER PRIMARY KEY,
@@ -23,7 +23,7 @@ orden NUMBER,
 estado char(1)
 );
 
-
+----------------------------------------
 --TABLA PERSONA
 CREATE TABLE personas(
 id_persona NUMBER PRIMARY KEY,
@@ -47,13 +47,20 @@ FOREIGN KEY (id_genero)
 REFERENCES generos (id_genero)
 
 );
-
+---------------------------------------
 CREATE TABLE clientes (
 id_cliente NUMBER PRIMARY KEY,
 id_persona NUMBER UNIQUE,
 direccion VARCHAR2(50),
-fecha_registro DATE
+fecha_registro DATE,
+
+CONSTRAINT fk_personas_clientes
+FOREIGN KEY (id_persona)
+REFERENCES personas (id_persona)
 );
+
+
+--------------------------
 
 CREATE TABLE personal(
 id_personal NUMBER PRIMARY KEY,
@@ -65,6 +72,11 @@ sueldo NUMBER (10,2) NOT NULL,
 estado char(1),
 fecha_inicio_contrato date,
 fecha_fin_contrato DATE,
+
+CONSTRAINT fk_personas_personal
+FOREIGN KEY (id_persona)
+REFERENCES personas (id_persona)
+
 );
 
 
@@ -193,6 +205,63 @@ id_dato_envio NUMBER,
 fecha_venta DATE,
 estado char(1)
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

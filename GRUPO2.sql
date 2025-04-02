@@ -23,31 +23,6 @@ orden NUMBER,
 estado char(1)
 );
 
---yuberli miranda
---lucia puma
-
------------------------------
-
-CREATE TABLE generos (
-id_genero NUMBER PRIMARY KEY,
-nombre_genero varchar2(15) UNIQUE NOT NULL,
-sigla VARCHAR2 (2) UNIQUE,
-orden NUMBER,
-estado char(1)
-);
-
-----------------------------------------
---TIPO DOCUMEDROP TABLENTO
-CREATE TABLE tipo_documento (
-id_tipo_documento NUMBER PRIMARY KEY,
-nombre  varchar2(150) UNIQUE NOT NULL,
-sigla VARCHAR2 (5) UNIQUE,
-pais VARCHAR2 (50),
-cantidad_digitos NUMBER,
-orden NUMBER,
-estado char(1)
-);
-
 ----------------------------------------
 --TABLA PERSONA
 CREATE TABLE personas(
@@ -140,19 +115,7 @@ descripcion VARCHAR2 (100),
 fecha_emision DATE,
 monto NUMBER (10,2),
 comision NUMBER (5)
-);
------------------
-CREATE TABLE comprobante_detalle(
-id_comprobante_detalle NUMBER PRIMARY KEY,
-id_cliente NUMBER,
-id_tipo_comprobante NUMBER, 
-id_producto NUMBER,
-id_promocion NUMBER,
-cantidad NUMBER,
-sub_total NUMBER,
-CONSTRAINT fk_tipo_comprobante_comprobante_detalle
-FOREIGN KEY (id_tipo_comprobante)
-REFERENCES tipo_comprobante (id_tipo_comprobante)
+
 );
 
 ------------------------------
@@ -192,6 +155,14 @@ CONSTRAINT fk_promocion_producto
 FOREIGN KEY (id_promocion)
 REFERENCES promocion (id_promocion)
 );
+------------------------------------------
+CREATE TABLE marca(
+id_marca NUMBER PRIMARY KEY,
+nombre VARCHAR2 (30),
+estado char(1)
+
+);
+
 
 ------------------------------------------
 CREATE TABLE proveedor(
@@ -267,10 +238,10 @@ estado char(1)
 
 CREATE TABLE venta(
 id_venta NUMBER PRIMARY KEY,
-id_cliente NUMBER UNIQUE,
+id_cliente NUMBER,
 id_tienda NUMBER ,
 id_tipo_pago NUMBER,
-id_comprobante_detalle NUMBER,
+id_tipo_comprobante NUMBER,
 id_personal NUMBER UNIQUE,
 id_dato_envio_cliente NUMBER,
 fecha_venta DATE,
@@ -288,9 +259,9 @@ CONSTRAINT fk_tipo_pago_venta
 FOREIGN KEY (id_tipo_pago)
 REFERENCES tipo_pago (id_tipo_pago),
 
-CONSTRAINT fk_comprobante_detalle_venta
-FOREIGN KEY (id_comprobante_detalle)
-REFERENCES comprobante_detalle (id_comprobante_detalle),
+CONSTRAINT fk_tipo_comprobante_venta
+FOREIGN KEY (id_tipo_comprobante)
+REFERENCES tipo_comprobante (id_tipo_comprobante),
 
 CONSTRAINT fk_personal_venta
 FOREIGN KEY (id_personal)
@@ -301,8 +272,63 @@ FOREIGN KEY (id_dato_envio_cliente)
 REFERENCES dato_envio_cliente (id_dato_envio_cliente)
 );
 
-ALTER TABLE venta ADD igb NUMBER(10,2);
+ALTER TABLE VENTA 
+DROP CONSTRAINT SYS_C008512;
+
+ALTER TABLE venta ADD igv NUMBER(10,2);
 ALTER TABLE venta ADD total NUMBER(10,2);
+
+ALTER TABLE producto ADD id_marca NUMBER;
+ALTER TABLE producto ADD CONSTRAINT fk_marca_producto
+FOREIGN KEY (id_marca)
+REFERENCES marca (id_marca);
+
+ALTER TABLE PRODUCTO DROP COLUMN  marca;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

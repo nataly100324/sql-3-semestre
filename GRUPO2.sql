@@ -144,7 +144,7 @@ descripcion VARCHAR2(100),
 precio NUMBER (10),
 cantidad NUMBER (5),
 echa_creacion DATE,
-marca VARCHAR2 (20),
+id_marca VARCHAR2 (20),
 
 
 CONSTRAINT fk_proveedor_producto

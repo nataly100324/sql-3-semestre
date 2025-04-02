@@ -285,6 +285,30 @@ REFERENCES marca (id_marca);
 
 ALTER TABLE PRODUCTO DROP COLUMN  marca;
 
+ALTER TABLE venta ADD id_usuario_registro NUMBER;
+ALTER TABLE venta ADD id_usuario_actualiza NUMBER;
+ALTER TABLE venta ADD fecha_registro DATE;
+ALTER TABLE venta ADD fecha_actualiza DATE;
+
+
+
+ALTER TABLE personas ADD id_usuario_registro NUMBER;
+ALTER TABLE personas ADD id_usuario_actualiza NUMBER;
+ALTER TABLE personas ADD fecha_registro DATE;
+ALTER TABLE personas ADD fecha_actualiza DATE;
+
+
+ALTER TABLE personal ADD id_usuario_registro NUMBER;
+ALTER TABLE personal ADD id_usuario_actualiza NUMBER;
+ALTER TABLE personal ADD fecha_registro DATE;
+ALTER TABLE personal ADD fecha_actualiza DATE;
+
+
+ALTER TABLE carrito_detalle ADD id_usuario_registro NUMBER;
+ALTER TABLE carrito_detalle ADD id_usuario_actualiza NUMBER;
+ALTER TABLE carrito_detalle ADD fecha_registro DATE;
+ALTER TABLE carrito_detalle ADD fecha_actualiza DATE;
+
 
 
 

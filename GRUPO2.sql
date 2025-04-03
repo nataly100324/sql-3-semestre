@@ -310,6 +310,57 @@ ALTER TABLE carrito_detalle ADD fecha_registro DATE;
 ALTER TABLE carrito_detalle ADD fecha_actualiza DATE;
 
 
+-----------------------
+CREATE OR REPLACE TRIGGER trg_registrar_fechas_personal
+BEFORE INSERT OR UPDATE ON personal
+FOR EACH ROW
+BEGIN
+  -- Al insertar, registra la fecha de registro
+  IF INSERTING THEN
+    :new.fecha_inicio_contrato := SYSDATE;
+  END IF;
+
+  -- Al actualizar, registra la fecha de actualización
+  IF INSERTING THEN
+    :new.fecha_fin_contrato := SYSDATE;
+  END IF;
+END;
+
+---------------------------------------------
+CREATE OR REPLACE TRIGGER trg_orden_generos
+BEFORE INSERT OR UPDATE ON generos
+FOR EACH ROW
+BEGIN
+ 
+    -- Asigna el valor de la secuencia al campo 'orden' si no se ha asignado previamente
+    IF :new.orden IS NULL THEN
+      :new.orden := seq_generos.NEXTVAL;
+    END IF;
+  END ;
+
+---------------------------------
+
+-----------------------------------
+ 
+CREATE OR REPLACE TRIGGER trg_pais_tipo_documento
+BEFORE INSERT OR UPDATE ON tipo_documento
+FOR EACH ROW
+BEGIN
+  -- Al insertar, registra la fecha de registro
+  IF INSERTING THEN
+    :new.pais :=   CASE round (dbms_random.value (1,4)) 
+                   WHEN 1 THEN 'peru'
+                   WHEN 2 THEN 'Argentina'
+                   WHEN 3 THEN 'Bolivia'
+                   WHEN 4 THEN 'Chile'
+                   END;
+  END IF;
+
+  -- Asigna el valor de la secuencia al campo 'orden' si no se ha asignado previamente
+    IF :new.orden IS NULL THEN
+      :new.orden := seq_tipo_documento.NEXTVAL;
+    END IF;
+  END ;
 
 
 

@@ -362,6 +362,202 @@ BEGIN
     END IF;
   END ;
 
+------------------------------------------
+CREATE OR REPLACE TRIGGER trg_orden_generos
+BEFORE INSERT OR UPDATE ON generos
+FOR EACH ROW
+BEGIN
+ 
+    -- Asigna el valor de la secuencia al campo 'orden' si no se ha asignado previamente
+    IF :new.orden IS NULL THEN
+      :new.orden := seq_generos.NEXTVAL;
+    END IF;
+  END ;
+
+---------------------------------
+
+ 
+CREATE OR REPLACE TRIGGER trg_pais_tipo_documento
+BEFORE INSERT OR UPDATE ON tipo_documento
+FOR EACH ROW
+BEGIN
+  -- Al insertar, registra la fecha de registro
+  IF INSERTING THEN
+    :new.pais :=   CASE round (dbms_random.value (1,4)) 
+                   WHEN 1 THEN 'peru'
+                   WHEN 2 THEN 'Argentina'
+                   WHEN 3 THEN 'Bolivia'
+                   WHEN 4 THEN 'Chile'
+                   END;
+  END IF;
+
+  -- Asigna el valor de la secuencia al campo 'orden' si no se ha asignado previamente
+    IF :new.orden IS NULL THEN
+      :new.orden := seq_tipo_documento.NEXTVAL;
+    END IF;
+  END ;
+
+
+---------------------------------------------------
+
+CREATE OR REPLACE TRIGGER trg_apellidos_personas
+BEFORE INSERT OR UPDATE ON personas
+FOR EACH ROW
+BEGIN
+  
+  IF INSERTING THEN
+    :new.apellido_paterno := CASE round (dbms_random.value (1,10)) 
+                   WHEN 1 THEN 'lipa'
+                   WHEN 2 THEN 'mendez'
+                   WHEN 3 THEN 'cruz'
+                   WHEN 4 THEN 'machaca'
+                    WHEN 5 THEN 'peña'
+                   WHEN 6 THEN 'laura'
+                   WHEN 7THEN 'mendoza'
+                   WHEN 8 THEN 'espinoza'
+                   WHEN 9 THEN 'bautista'
+                   WHEN 10 THEN 'riveera'
+                   END;
+  END IF;
+
+  
+  IF INSERTING THEN
+    :new.apellido_materno := CASE round (dbms_random.value (1,10)) 
+                   WHEN 1 THEN 'garcia'
+                   WHEN 2 THEN 'rodrigues'
+                   WHEN 3 THEN 'gomes'
+                   WHEN 4 THEN 'cutipa'
+                    WHEN 5 THEN 'lipa'
+                   WHEN 6 THEN 'laura'
+                   WHEN 7 THEN 'perez'
+                   WHEN 8 THEN 'machaca'
+                   WHEN 9 THEN 'bautista'
+                   WHEN 10 THEN 'ramos'
+                   END;  
+  END IF;
+
+
+END;
+
+---------------------------------------------------------------------
+--CLIENTES
+CREATE OR REPLACE TRIGGER trg_registrar_fechas_cliente
+BEFORE INSERT OR UPDATE ON cliente
+FOR EACH ROW
+BEGIN
+  -- Al insertar, registra la fecha de registro
+  IF INSERTING THEN
+    :new.fecha_registro   := SYSDATE;
+  END IF;
+
+  -- Al actualizar, registra la fecha de actualización
+  IF INSERTING THEN
+    :new.id_cliente := seq_cliente.NEXTVAL;
+  END IF;
+END;
+
+-----------------------------------------------
+
+--tipo_pago
+
+CREATE OR REPLACE TRIGGER trg_orden_tipo_pago
+BEFORE INSERT OR UPDATE ON tipo_pago
+FOR EACH ROW
+BEGIN
+ 
+    -- Asigna el valor de la secuencia al campo 'orden' si no se ha asignado previamente
+    IF INSERTING THEN
+      :new.orden := seq_tipo_pago1.NEXTVAL;
+    END IF;
+  
+ IF INSERTING THEN
+    :new.id_tipo_pago := seq_tipo_pago.NEXTVAL;
+  END IF;
+END;
+ALTER SEQUENCE seq_tipo_pago1
+RESTART START WITH 1;
+-----------------------------------------------------------
+--dato_envio_cliente
+
+CREATE OR REPLACE TRIGGER trg_registrar_fechas_dato_envio_cliente
+BEFORE INSERT OR UPDATE ON dato_envio_cliente
+FOR EACH ROW
+BEGIN
+  -- Al insertar, registra la fecha de registro
+  IF INSERTING THEN
+    :new.fecha_envio := SYSDATE;
+  END IF;
+
+  -- Al actualizar, registra la fecha de actualización
+  IF INSERTING THEN
+    :new.fecha_entrega := SYSDATE;
+  END IF;
+ IF INSERTING THEN
+    :new.id_dato_envio_cliente:= seq_dato_envio_cliente.NEXTVAL;
+  END IF;
+END;
+
+----------------------------------------------------
+--tienda
+
+CREATE OR REPLACE TRIGGER trg_nombre_tienda
+BEFORE INSERT OR UPDATE ON tienda
+FOR EACH ROW
+BEGIN
+  -- Al insertar, registra la fecha de registro
+  IF INSERTING THEN
+    :new.nombre   := 'shopify pos';
+  END IF;
+
+  -- Al actualizar, registra la fecha de actualización
+  IF INSERTING THEN
+    :new.ubicacion := 'av.los pensamientos';
+  END IF;
+ IF INSERTING THEN
+    :new.telefono := 958742166 ;
+  END IF;
+ IF INSERTING THEN
+    :new.id_tienda := seq_tienda.NEXTVAL ;
+  END IF;
+END;
+
+
+----------------------------------
+--PRODUCTO
+
+CREATE OR REPLACE TRIGGER trg_nombre_producto
+BEFORE INSERT OR UPDATE ON producto
+FOR EACH ROW
+BEGIN
+ 
+	IF INSERTING THEN
+    :new.nombre := CASE round (dbms_random.value (1,10)) 
+                   WHEN 1 THEN 'gjzr'
+                   WHEN 2 THEN 'hjzt'
+                   WHEN 3 THEN 'th'
+                   WHEN 4 THEN 'tdh'
+                    WHEN 5 THEN 'thr'
+                   WHEN 6 THEN 'th'
+                   WHEN 7THEN 'ryh'
+                   WHEN 8 THEN 'edrth'
+                   WHEN 9 THEN 'rwyhrh'
+                   WHEN 10 THEN 'wshywsr'
+                   END;
+  END IF;
+    
+   
+  IF INSERTING THEN
+    :new.id_promocion := CASE round (dbms_random.value (1,2)) 
+                   WHEN 1 THEN '1'
+                   WHEN 2 THEN '2'
+                  END;
+  END IF;
+ 
+  IF INSERTING THEN
+    :new.id_producto := seq_producto.NEXTVAL ;
+  END IF;
+END;
+
 
 
 

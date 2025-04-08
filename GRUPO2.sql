@@ -559,6 +559,62 @@ BEGIN
 END;
 
 
+------------------------------------------
+--PROMOCION
+
+CREATE OR REPLACE TRIGGER trg_registrar_fechas_promocion
+BEFORE INSERT OR UPDATE ON promocion
+FOR EACH ROW
+BEGIN
+  -- Al insertar, registra la fecha de registro
+  IF INSERTING THEN
+    :new.fecha_inicio := SYSDATE;
+  END IF;
+
+  -- Al actualizar, registra la fecha de actualización
+  IF INSERTING THEN
+    :new.fecha_fin := SYSDATE;
+  END IF;
+ IF INSERTING THEN
+    :new.id_promocion := seq_promocion.NEXTVAL ;
+  END IF;
+END;
+
+-------------
+--insert into para cada tabla
+
+-- 1_Tabla generos
+INSERT INTO generos (id_genero, nombre_genero, sigla, orden, estado) VALUES (4, 'Masculino3', 'M3', '1', 1);
+
+-- 2_Tabla tipo_documento
+INSERT INTO tipo_documento (id_tipo_documento, nombre, sigla, pais, cantidad_digitos, orden, estado) VALUES (5, 'Documento Nacional de Identidad2', 'DNI2', 'Perú', 8,' 5', 1);
+
+-- 3-Tabla personas
+INSERT INTO personas (id_persona, id_tipo_documento, id_genero, nombres, apellido_paterno, apellido_materno, fecha_nacimiento, celular, numero_documento, correo, estado) VALUES (11, 1, 1, 'Juan', 'Pérez', 'Gómez', TO_DATE('1990-05-15', 'YYYY-MM-DD'), 987654321, 12345678, 'juan.perez@email.com', '1');
+
+-- 4-Tabla cliente
+INSERT INTO cliente (id_cliente, id_persona, direccion, fecha_registro) VALUES (11, 11, 'Av. Principal 123', TO_DATE('2023-01-10', 'YYYY-MM-DD'));
+
+-- 5-Tabla personal
+INSERT INTO personal (id_personal, id_persona, id_venta, direccion, cargo, sueldo, estado, fecha_inicio_contrato, fecha_fin_contrato) VALUES (6, 11, 1, 'Jr. Libertad 789', 'Vendedor', 1500.00, '1', TO_DATE('2022-07-01', 'YYYY-MM-DD'), NULL);
+
+-- 6_Tabla tipo_pago
+INSERT INTO tipo_pago (id_tipo_pago, nombre, estado, orden) VALUES (4, 'Efectivo', '1', 4);
+
+-- 7_Tabla dato_envio_cliente
+INSERT INTO dato_envio_cliente (id_dato_envio_cliente, estado, fecha_envio, fecha_entrega, tipo_envio, costo_envio, direccion, ubicacion) VALUES (4, '1', TO_DATE('2025-04-09', 'YYYY-MM-DD'), TO_DATE('2025-04-14', 'YYYY-MM-DD'), 'Estándar', 15.00, 'Av. Los Incas 321', 'Puno');
+
+
+--8_ Tabla tipo_comprobante
+INSERT INTO tipo_comprobante (id_tipo_comprobante, nombre, descripcion, fecha_emision, monto, comision) VALUES (2, 'Boleta de Venta', 'Comprobante simple', TO_DATE('2025-04-08', 'YYYY-MM-DD'), 50.00, 1);
+
+--9_ Tabla producto
+INSERT INTO producto (id_producto, id_proveedor, id_promocion, nombre, descripcion, precio, cantidad, echa_creacion, id_marca) VALUES (16, 1, 1, 'Camiseta Algodón1', 'Camiseta de algodón suave1', 20, 10, TO_DATE('2025-03-01', 'YYYY-MM-DD'), 1);
+
+--10_ Tabla marca
+INSERT INTO marca (id_marca, nombre, estado) VALUES (6, 'Nike', '1');
+
+
 
 
 

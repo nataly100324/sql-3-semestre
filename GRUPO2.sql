@@ -11,6 +11,11 @@ orden NUMBER,
 estado char(1)
 );
 
+CREATE SEQUENCE seq_generos
+START WITH 1
+INCREMENT BY 1
+NOCACHE;
+
 ----------------------------------------
 --TIPO DOCUMEDROP TABLENTO
 CREATE TABLE tipo_documento (
@@ -22,6 +27,10 @@ cantidad_digitos NUMBER,
 orden NUMBER,
 estado char(1)
 );
+CREATE SEQUENCE seq_tipo_documento
+START WITH 1
+INCREMENT BY 1
+NOCACHE;
 
 ----------------------------------------
 --TABLA PERSONA
@@ -47,6 +56,11 @@ FOREIGN KEY (id_genero)
 REFERENCES generos (id_genero)
 
 );
+CREATE SEQUENCE seq_personas
+START WITH 1
+INCREMENT BY 1
+NOCACHE;
+
 ---------------------------------------
 CREATE TABLE cliente (
 id_cliente NUMBER PRIMARY KEY,
@@ -59,6 +73,10 @@ FOREIGN KEY (id_persona)
 REFERENCES personas (id_persona)
 );
 
+CREATE SEQUENCE seq_cliente
+START WITH 1
+INCREMENT BY 1
+NOCACHE;
 
 --------------------------
 
@@ -78,6 +96,10 @@ FOREIGN KEY (id_persona)
 REFERENCES personas (id_persona)
 
 );
+CREATE SEQUENCE seq_personal
+START WITH 1
+INCREMENT BY 1
+NOCACHE;
 
 --------------------------------
 CREATE TABLE tipo_pago(
@@ -97,6 +119,12 @@ costo_envio NUMBER (5,2),
 direccion VARCHAR2(50),
 ubicacion VARCHAR2 (30)
 );
+CREATE SEQUENCE seq_dato_envio_cliente
+START WITH 1
+INCREMENT BY 1
+NOCACHE;
+
+
 -------------------------
 
 CREATE TABLE tienda(
@@ -107,6 +135,11 @@ telefono NUMBER (9),
 estado char(1)
 
 );
+CREATE SEQUENCE seq_tienda
+START WITH 1
+INCREMENT BY 1
+NOCACHE;
+
 ----------------------------------
 CREATE TABLE tipo_comprobante(
 id_tipo_comprobante NUMBER PRIMARY KEY,
@@ -117,6 +150,10 @@ monto NUMBER (10,2),
 comision NUMBER (5)
 
 );
+CREATE SEQUENCE seq_tipo_comprobante
+START WITH 1
+INCREMENT BY 1
+NOCACHE;
 
 ------------------------------
 CREATE TABLE carrito_detalle(
@@ -133,6 +170,10 @@ CONSTRAINT fk_producto_carrito_detalle
 FOREIGN KEY (id_producto)
 REFERENCES producto (id_producto)
 );
+CREATE SEQUENCE seq_carrito_detalle
+START WITH 1
+INCREMENT BY 1
+NOCACHE;
 
 ------------------------------------------
 CREATE TABLE producto(
@@ -144,7 +185,7 @@ descripcion VARCHAR2(100),
 precio NUMBER (10),
 cantidad NUMBER (5),
 echa_creacion DATE,
-id_marca VARCHAR2 (20),
+marca VARCHAR2 (20),
 
 
 CONSTRAINT fk_proveedor_producto
@@ -155,6 +196,11 @@ CONSTRAINT fk_promocion_producto
 FOREIGN KEY (id_promocion)
 REFERENCES promocion (id_promocion)
 );
+CREATE SEQUENCE seq_producto
+START WITH 1
+INCREMENT BY 1
+NOCACHE;
+
 ------------------------------------------
 CREATE TABLE marca(
 id_marca NUMBER PRIMARY KEY,
@@ -162,6 +208,10 @@ nombre VARCHAR2 (30),
 estado char(1)
 
 );
+CREATE SEQUENCE seq_marca
+START WITH 1
+INCREMENT BY 1
+NOCACHE;
 
 
 ------------------------------------------
@@ -173,6 +223,10 @@ correo VARCHAR2 (20),
 direccion VARCHAR2(50),
 estado char(1)
 );
+CREATE SEQUENCE seq_proveedor
+START WITH 1
+INCREMENT BY 1
+NOCACHE;
 
 -------------------------------------------
 CREATE TABLE promocion(
@@ -182,6 +236,10 @@ descuernto NUMBER (20),
 fecha_inicio DATE,
 fecha_fin DATE
 );
+CREATE SEQUENCE seq_promocion
+START WITH 1
+INCREMENT BY 1
+NOCACHE;
 --------------------------------------------
 CREATE TABLE reembolso_detalle(
 id_reembolso_detalle NUMBER PRIMARY KEY,
@@ -309,8 +367,7 @@ ALTER TABLE carrito_detalle ADD id_usuario_actualiza NUMBER;
 ALTER TABLE carrito_detalle ADD fecha_registro DATE;
 ALTER TABLE carrito_detalle ADD fecha_actualiza DATE;
 
-
------------------------
+-----------------------------
 CREATE OR REPLACE TRIGGER trg_registrar_fechas_personal
 BEFORE INSERT OR UPDATE ON personal
 FOR EACH ROW
@@ -327,42 +384,6 @@ BEGIN
 END;
 
 ---------------------------------------------
-CREATE OR REPLACE TRIGGER trg_orden_generos
-BEFORE INSERT OR UPDATE ON generos
-FOR EACH ROW
-BEGIN
- 
-    -- Asigna el valor de la secuencia al campo 'orden' si no se ha asignado previamente
-    IF :new.orden IS NULL THEN
-      :new.orden := seq_generos.NEXTVAL;
-    END IF;
-  END ;
-
----------------------------------
-
------------------------------------
- 
-CREATE OR REPLACE TRIGGER trg_pais_tipo_documento
-BEFORE INSERT OR UPDATE ON tipo_documento
-FOR EACH ROW
-BEGIN
-  -- Al insertar, registra la fecha de registro
-  IF INSERTING THEN
-    :new.pais :=   CASE round (dbms_random.value (1,4)) 
-                   WHEN 1 THEN 'peru'
-                   WHEN 2 THEN 'Argentina'
-                   WHEN 3 THEN 'Bolivia'
-                   WHEN 4 THEN 'Chile'
-                   END;
-  END IF;
-
-  -- Asigna el valor de la secuencia al campo 'orden' si no se ha asignado previamente
-    IF :new.orden IS NULL THEN
-      :new.orden := seq_tipo_documento.NEXTVAL;
-    END IF;
-  END ;
-
-------------------------------------------
 CREATE OR REPLACE TRIGGER trg_orden_generos
 BEFORE INSERT OR UPDATE ON generos
 FOR EACH ROW
@@ -599,7 +620,7 @@ INSERT INTO cliente (id_cliente, id_persona, direccion, fecha_registro) VALUES (
 INSERT INTO personal (id_personal, id_persona, id_venta, direccion, cargo, sueldo, estado, fecha_inicio_contrato, fecha_fin_contrato) VALUES (6, 11, 1, 'Jr. Libertad 789', 'Vendedor', 1500.00, '1', TO_DATE('2022-07-01', 'YYYY-MM-DD'), NULL);
 
 -- 6_Tabla tipo_pago
-INSERT INTO tipo_pago (id_tipo_pago, nombre, estado, orden) VALUES (4, 'Efectivo', '1', 4);
+INSERT INTO tipo_pago (id_tipo_pago, nombre, estado, orden) VALUES (5, 'transferencia', '1', 5);
 
 -- 7_Tabla dato_envio_cliente
 INSERT INTO dato_envio_cliente (id_dato_envio_cliente, estado, fecha_envio, fecha_entrega, tipo_envio, costo_envio, direccion, ubicacion) VALUES (4, '1', TO_DATE('2025-04-09', 'YYYY-MM-DD'), TO_DATE('2025-04-14', 'YYYY-MM-DD'), 'Estándar', 15.00, 'Av. Los Incas 321', 'Puno');
@@ -613,6 +634,96 @@ INSERT INTO producto (id_producto, id_proveedor, id_promocion, nombre, descripci
 
 --10_ Tabla marca
 INSERT INTO marca (id_marca, nombre, estado) VALUES (6, 'Nike', '1');
+
+
+SELECT * FROM  TIPO_PAGO tp 
+
+--------------------------------------------
+--UDATE ACTUALIZA UNA TABLA
+UPDATE GENEROS 
+SET NOMBRE_GENERO = 'masculino10'
+WHERE ID_GENERO = 4;
+-----------------------------------------
+UPDATE TIPO_DOCUMENTO  
+SET NOMBRE = 'masculino10'
+WHERE ID_TIPO_DOCUMENTO  = 4;
+
+-----------------------------------
+UPDATE PERSONAS  
+SET NOMBRES = 'masculino10'
+WHERE ID_PERSONA  = 4;
+---------------------------
+UPDATE CLIENTE  
+SET DIRECCION  = 'masculino10'
+WHERE ID_CLIENTE  = 4;
+------------------------------------
+UPDATE PERSONAL  
+SET DIRECCION  = 'masculino10'
+WHERE ID_PERSONAL  = 4;
+----------------------------
+UPDATE TIPO_PAGO  
+SET NOMBRE = 'masculino10'
+WHERE ID_TIPO_PAGO  = 4;
+---------------------------
+UPDATE DATO_ENVIO_CLIENTE  
+SET DIRECCION = 'masculino10'
+WHERE ID_DATO_ENVIO_CLIENTE  = 4;
+------------------------------------
+--7 DELETE 
+
+DELETE FROM GENEROS g  
+WHERE ID_GENERO = 4;
+-------------------------------
+DELETE FROM TIPO_DOCUMENTO td  
+WHERE ID_TIPO_DOCUMENTO = 4;
+----------------------------
+DELETE FROM PERSONAS p  
+WHERE ID_PERSONA = 4;
+--------------------------
+DELETE FROM CLIENTE c  
+WHERE ID_CLIENTE = 4;
+---------------------
+DELETE FROM PERSONAL p  
+WHERE ID_PERSONAL = 4;
+------------------
+DELETE FROM TIPO_PAGO tp  
+WHERE ID_TIPO_PAGO = 4;
+------------------
+DELETE FROM DATO_ENVIO_CLIENTE dec2  
+WHERE ID_DATO_ENVIO_CLIENTE = 4;
+----------------------
+
+
+
+--CREANDO UNA FUNCION EN ORACLE 
+
+   CREATE FUNCTION FN_PERSONA_NOMBRE_COMPLETO(p_id_persona IN INTEGER)
+RETURN VARCHAR2 IS
+	v_nombre_completo VARCHAR2(150);
+BEGIN
+	SELECT 
+	UPPER(p.NOMBRES)||','||' '|| 
+	INITCAP(p.APELLIDO_PATERNO)||' '|| 
+	TRIM(INITCAP(LOWER(p.APELLIDO_MATERNO))) INTO v_nombre_completo 
+	FROM PERSONAS p 
+	WHERE p.ID_PERSONA  = p_id_persona;
+	
+	RETURN v_nombre_completo;
+END;
+
+SELECT * FROM personas p;
+SELECT * FROM PERSONAL p  ;
+SELECT FN_PERSONA_NOMBRE_COMPLETO(id_persona)   
+FROM CLIENTE c   ; 
+--
+
+
+
+
+
+
+
+
 
 
 
